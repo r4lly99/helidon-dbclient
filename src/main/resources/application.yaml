@@ -1,0 +1,60 @@
+
+app:
+  kafka:
+    bootstrap.servers: 192.168.8.105:9092
+    topic: messaging-test-topic-1
+
+server:
+  port: 8080
+  host: 0.0.0.0
+  features:
+    print-details: true
+
+restrictive-cors:
+  allow-origins: ["http://foo.com", "http://there.com"]
+  allow-methods: ["PUT", "DELETE"]
+
+db:
+  source: "mongoDb"
+  connection:
+    url: "mongodb://localhost:27017/pokemon"
+  statements:
+    # Insert operation contains collection name, operation type and data to be inserted.
+    # Name variable is stored as MongoDB primary key attribute _id
+    insert2: '{
+            "collection": "pokemons",
+                         "value": {
+                             "_id": $name,
+                             "type": $type
+                         }
+        }'
+    select-all: '{
+            "collection": "pokemons",
+            "query": {}
+        }'
+    select-one: '{
+            "collection": "pokemons",
+            "query": {
+              "name": ?
+            }
+        }'
+    delete-all: '{
+            "collection": "pokemons",
+            "operation": "delete"
+        }'
+    update: '{
+            "collection": "pokemons",
+            "query": {
+                "_id": $name
+            },
+            "value": {
+                $set: { "type": $type }
+            }
+        }'
+    delete: '{
+            "collection": "pokemons",
+            "query": {
+                "_id": ?
+            }
+        }'
+
