@@ -117,7 +117,7 @@ public final class MongoDbExampleMain {
         return Routing.builder()
                 .register(health)   // Health at "/health"
                 .register(metrics)  // Metrics at "/metrics"
-                .register("/db", new PokemonService(dbClient))
+                .register("/db", corsSupportForPokemonService(config),new PokemonService(dbClient))
 //                 register static content support (on "/")
                 .register(StaticContentSupport.builder("/WEB").welcomeFileName("index.html"))
                 // register rest endpoint for sending to Kafka
