@@ -55,4 +55,12 @@ public class Pokemon {
     public void setType(String type) {
         this.type = type;
     }
+
+    @Override
+    public String toString() {
+        return "Pokemon{" +
+                "name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                '}';
+    }
 }
