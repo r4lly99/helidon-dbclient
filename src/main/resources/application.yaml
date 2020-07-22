@@ -1,14 +1,15 @@
-
 app:
   kafka:
-    bootstrap.servers: 192.168.8.105:9092
+    bootstrap.servers: 192.168.8.104:9092
     topic: messaging-test-topic-1
 
 server:
-  port: 8080
+  port: 7001
   host: 0.0.0.0
-  features:
-    print-details: true
+  static:
+    classpath:
+      location: /WEB
+      welcome: index.html
 
 restrictive-cors:
   allow-origins: ["http://foo.com", "http://there.com"]
