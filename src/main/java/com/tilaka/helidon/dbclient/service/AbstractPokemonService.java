@@ -3,6 +3,8 @@ package com.tilaka.helidon.dbclient.service;
 /**
  * @author mohd rully k
  */
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CompletionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -10,10 +12,13 @@ import java.util.logging.Logger;
 import javax.json.JsonObject;
 
 import com.tilaka.helidon.dbclient.domain.Pokemon;
+import com.tilaka.helidon.dbclient.domain.PokemonMapper;
+import com.tilaka.helidon.dbclient.domain.PokemonMapperProvider;
 import io.helidon.common.http.Http;
 import io.helidon.common.reactive.Multi;
 import io.helidon.common.reactive.Single;
 import io.helidon.dbclient.DbClient;
+import io.helidon.dbclient.DbMapper;
 import io.helidon.dbclient.DbRow;
 import io.helidon.webserver.Handler;
 import io.helidon.webserver.Routing;

@@ -25,7 +25,7 @@ db:
     insert2: '{
             "collection": "pokemons",
                          "value": {
-                             "_id": $name,
+                             "name": $name,
                              "type": $type
                          }
         }'
