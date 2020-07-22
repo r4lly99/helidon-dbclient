@@ -7,7 +7,6 @@ package com.tilaka.helidon.dbclient;
 import com.tilaka.helidon.dbclient.endpoint.WebSocketEndpoint;
 import com.tilaka.helidon.dbclient.service.PokemonService;
 import com.tilaka.helidon.dbclient.service.SendingService;
-import io.helidon.common.reactive.Multi;
 import io.helidon.config.Config;
 import io.helidon.dbclient.DbClient;
 import io.helidon.dbclient.DbStatementType;
@@ -17,31 +16,20 @@ import io.helidon.dbclient.tracing.DbClientTracing;
 import io.helidon.health.HealthSupport;
 import io.helidon.media.jsonb.JsonbSupport;
 import io.helidon.media.jsonp.JsonpSupport;
-import io.helidon.messaging.Channel;
-import io.helidon.messaging.Emitter;
-import io.helidon.messaging.Messaging;
-import io.helidon.messaging.connectors.kafka.KafkaConnector;
 import io.helidon.metrics.MetricsSupport;
 import io.helidon.webserver.Routing;
+import io.helidon.webserver.StaticContentSupport;
 import io.helidon.webserver.WebServer;
 import io.helidon.webserver.cors.CorsSupport;
 import io.helidon.webserver.cors.CrossOriginConfig;
 import io.helidon.webserver.tyrus.TyrusSupport;
-import org.eclipse.microprofile.reactive.messaging.Message;
-import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
 
 import javax.websocket.server.ServerEndpointConfig;
 import java.io.IOException;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-/**
- * Simple Hello World rest application.
- */
+
 public final class MongoDbExampleMain {
 
     /**
@@ -77,9 +65,8 @@ public final class MongoDbExampleMain {
 
         SendingService sendingService = new SendingService(config);
 
-        WebServer server = WebServer.builder(createRouting(sendingService))
+        WebServer server = WebServer.builder(createRouting(sendingService, config))
                 .config(config.get("server"))
-//                .tracer(TracerBuilder.create("mongo-db").build())
                 .addMediaSupport(JsonpSupport.create())
                 .addMediaSupport(JsonbSupport.create())
                 .build();
@@ -107,13 +94,8 @@ public final class MongoDbExampleMain {
 
     }
 
-    /**
-     * Creates new {@link io.helidon.webserver.Routing}.
-     *
-     * @param config configuration of this server
-     * @return routing configured with JSON support, a health check, and a service
-     */
-    private static Routing createRouting(Config config) {
+    private static Routing createRouting(SendingService sendingService, Config config) {
+
         Config dbConfig = config.get("db");
 
         DbClient dbClient = DbClient.builder(dbConfig)
@@ -136,14 +118,8 @@ public final class MongoDbExampleMain {
                 .register(health)   // Health at "/health"
                 .register(metrics)  // Metrics at "/metrics"
                 .register("/db", corsSupportForPokemonService(config), new PokemonService(dbClient))
-                .build();
-    }
-
-    private static Routing createRouting(SendingService sendingService) {
-
-        return Routing.builder()
-                // register static content support (on "/")
-//                .register(StaticContentSupport.builder("/WEB").welcomeFileName("index.html"))
+//                 register static content support (on "/")
+                .register(StaticContentSupport.builder("/WEB").welcomeFileName("index.html"))
                 // register rest endpoint for sending to Kafka
                 .register("/rest/messages", sendingService)
                 // register WebSocket endpoint to push messages coming from Kafka to client
@@ -154,12 +130,6 @@ public final class MongoDbExampleMain {
                                         .build())
                                 .build())
                 .build();
-    }
-
-
-    private static IllegalStateException noConfigError(String key) {
-        return new IllegalStateException("Attempting to create a Pokemon service with no configuration"
-                + ", config key: " + key);
     }
 
     private static CorsSupport corsSupportForPokemonService(Config config) {

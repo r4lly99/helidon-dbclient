@@ -45,6 +45,7 @@ public class WebSocketEndpoint extends Endpoint {
                 .publisherConfig(KafkaConnector.configBuilder()
                         .bootstrapServers(kafkaServer)
                         .groupId("example-group-" + session.getId())
+//                        .groupId("test-consumer-group")
                         .topic(topic)
                         .autoOffsetReset(KafkaConfigBuilder.AutoOffsetReset.LATEST)
                         .enableAutoCommit(true)
