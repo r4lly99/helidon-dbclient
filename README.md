@@ -1,4 +1,4 @@
-# Helidon DbClient & Messaging with Kafka Examples
+# Helidon SE DbClient & Messaging with Kafka Examples
 
 ## Prerequisites
 * Java 11+ 
