@@ -1,7 +1,7 @@
 app:
   kafka:
-    bootstrap.servers: 192.168.8.104:9092
-    topic: messaging-test-topic-1
+    bootstrap.servers: localhost:9092
+    topic: test
 
 server:
   port: 7001
