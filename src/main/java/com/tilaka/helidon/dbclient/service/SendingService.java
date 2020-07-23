@@ -12,6 +12,8 @@ import io.helidon.webserver.Routing;
 import io.helidon.webserver.Service;
 
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.eclipse.microprofile.reactive.messaging.Message;
+import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
 
 public class SendingService implements Service {
 
@@ -46,10 +48,11 @@ public class SendingService implements Service {
         messaging = Messaging.builder()
                 .emitter(emitter)
                 // Processor connect two channels together
-                .processor(toProcessor, toKafka, payload -> {
-                    // Transforming to upper-case before sending to kafka
-                    return payload.toUpperCase();
-                })
+                .processor(toProcessor, toKafka, ReactiveStreams.<Message<String>>builder()
+                        .map(Message::getPayload)
+                        .flatMap(o -> ReactiveStreams.of(o.toUpperCase(), o.toLowerCase()))
+                        .map(Message::of)
+                )
                 .connector(kafkaConnector)
                 .build()
                 .start();
