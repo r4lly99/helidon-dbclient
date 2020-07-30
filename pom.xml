@@ -31,10 +31,6 @@
             <artifactId>helidon-webserver-cors</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.helidon.config</groupId>
-            <artifactId>helidon-config-yaml</artifactId>
-        </dependency>
-        <dependency>
             <groupId>io.helidon.dbclient</groupId>
             <artifactId>helidon-dbclient-mongodb</artifactId>
         </dependency>
@@ -77,14 +73,6 @@
         <dependency>
             <groupId>io.helidon.common</groupId>
             <artifactId>helidon-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.websocket</groupId>
-            <artifactId>jakarta.websocket-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.helidon.webserver</groupId>
-            <artifactId>helidon-webserver-tyrus</artifactId>
         </dependency>
         <dependency>
             <groupId>io.helidon.health</groupId>
